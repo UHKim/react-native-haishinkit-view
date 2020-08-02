@@ -18,4 +18,5 @@ Pod::Spec.new do |s|
   
 
   s.dependency "React"
+  s.dependency "HaishinKit", "~> 1.0.9"
 end

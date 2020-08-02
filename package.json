@@ -57,6 +57,7 @@
     "jest": "^26.0.1",
     "pod-install": "^0.1.0",
     "prettier": "^2.0.5",
+    "prop-types": "^15.7.2",
     "react": "16.11.0",
     "react-native": "0.62.2",
     "release-it": "^13.5.8",
@@ -72,12 +73,6 @@
       "<rootDir>/example/node_modules",
       "<rootDir>/lib/"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "yarn lint && yarn typescript"
-    }
   },
   "commitlint": {
     "extends": [
@@ -119,7 +114,10 @@
       ]
     }
   },
-  "eslintIgnore": ["node_modules/", "lib/"],
+  "eslintIgnore": [
+    "node_modules/",
+    "lib/"
+  ],
   "prettier": {
     "quoteProps": "consistent",
     "singleQuote": true,
@@ -130,6 +128,10 @@
   "@react-native-community/bob": {
     "source": "src",
     "output": "lib",
-    "targets": ["commonjs", "module", "typescript"]
+    "targets": [
+      "commonjs",
+      "module",
+      "typescript"
+    ]
   }
 }
