@@ -17,6 +17,10 @@ open class CameraView: SurfaceView, SurfaceHolder.Callback {
         holder.addCallback(this)
     }
 
+    constructor(context: Context): super(context) {
+      holder.addCallback(this)
+    }
+
     override fun surfaceCreated(holder: SurfaceHolder?) {
         stream?.camera?.surfaceCreated(holder)
     }
