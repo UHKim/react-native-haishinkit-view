@@ -79,11 +79,11 @@ open class RTMPConnection : EventDispatcher(null) {
         override fun handleEvent(event: Event) {
             val data = EventUtils.toMap(event)
             when (data["code"].toString()) {
-                RTMPConnection.Code.CONNECT_SUCCESS.rawValue -> {
+                Code.CONNECT_SUCCESS.rawValue -> {
                     var message = RTMPSetChunkSizeMessage()
-                    message.size = RTMPConnection.DEFAULT_CHUNK_SIZE_S
+                    message.size = DEFAULT_CHUNK_SIZE_S
                     message.chunkStreamID = RTMPChunk.CONTROL
-                    connection.socket.chunkSizeS = RTMPConnection.DEFAULT_CHUNK_SIZE_S
+                    connection.socket.chunkSizeS = DEFAULT_CHUNK_SIZE_S
                     connection.socket.doOutput(RTMPChunk.ZERO, message)
                 }
             }
@@ -94,8 +94,8 @@ open class RTMPConnection : EventDispatcher(null) {
         private set
     var swfUrl: String? = null
     var pageUrl: String? = null
-    var flashVer = RTMPConnection.DEFAULT_FLASH_VER
-    var objectEncoding = RTMPConnection.DEFAULT_OBJECT_ENCODING
+    var flashVer = DEFAULT_FLASH_VER
+    var objectEncoding = DEFAULT_OBJECT_ENCODING
     internal val messages = ConcurrentHashMap<Short, RTMPMessage>()
     internal val streams = ConcurrentHashMap<Int, RTMPStream>()
     internal val responders = ConcurrentHashMap<Int, IResponder>()
@@ -141,7 +141,7 @@ open class RTMPConnection : EventDispatcher(null) {
         arguments.forEach { value ->
             this.arguments.add(value)
         }
-        socket.connect(uri!!.host, if (port == -1) RTMPConnection.DEFAULT_PORT else port)
+        socket.connect(uri!!.host, if (port == -1) DEFAULT_PORT else port)
     }
 
     fun close() {
@@ -221,7 +221,7 @@ open class RTMPConnection : EventDispatcher(null) {
         commandObject.put("swfUrl", swfUrl)
         commandObject.put("tcUrl", uri!!.toString())
         commandObject.put("fpad", false)
-        commandObject.put("capabilities", RTMPConnection.DEFAULT_CAPABILITIES)
+        commandObject.put("capabilities", DEFAULT_CAPABILITIES)
         commandObject.put("audioCodecs", SupportSound.AAC.rawValue)
         commandObject.put("videoCodecs", SupportVideo.H264.rawValue)
         commandObject.put("videoFunction", VideoFunction.CLIENT_SEEK.rawValue)
