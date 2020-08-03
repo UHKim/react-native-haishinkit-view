@@ -31,7 +31,7 @@ export type RtmpStatusType = {
   description: string;
 };
 
-let HKViewNative = requireNativeComponent<LiveViewProps>('HaishinkitView');
+let HKViewNative = requireNativeComponent<LiveViewProps>('RNHaishinkitView');
 
 class HaishinkitView extends Component<LiveViewProps> {
   static propTypes: any;
@@ -46,7 +46,7 @@ class HaishinkitView extends Component<LiveViewProps> {
     }, 0);
   }
 
-  broadcastViewCmd = (cmdName: string, cmdArgs?: any[]) => {
+  nativeViewCmd = (cmdName: string, cmdArgs?: any[]) => {
     try {
       UIManager.dispatchViewManagerCommand(
         findNodeHandle(this),
@@ -74,11 +74,11 @@ class HaishinkitView extends Component<LiveViewProps> {
     this.props.onViewError!(event.nativeEvent);
   };
 
-  startPublish = () => this.broadcastViewCmd('startPublish');
+  startPublish = () => this.nativeViewCmd('startPublish');
 
-  stopPublish = () => this.broadcastViewCmd('stopPublish');
+  stopPublish = () => this.nativeViewCmd('stopPublish');
 
-  toggleCamera = () => this.broadcastViewCmd('toggleCamera');
+  toggleCamera = () => this.nativeViewCmd('toggleCamera');
 
   render() {
     return (
