@@ -16,7 +16,7 @@
 
 @implementation RNHaishinkitViewManager
 
-RCT_EXPORT_MODULE(RNHKView)
+RCT_EXPORT_MODULE(RNHaishinkitView)
 
 RCT_EXPORT_VIEW_PROPERTY(streamUrl, NSString)
 RCT_EXPORT_VIEW_PROPERTY(streamKey, NSString)

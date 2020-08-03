@@ -50,7 +50,7 @@ class HaishinkitView extends Component<LiveViewProps> {
     try {
       UIManager.dispatchViewManagerCommand(
         findNodeHandle(this),
-        UIManager.getViewManagerConfig('HaishinkitView').Commands[cmdName],
+        UIManager.getViewManagerConfig('RNHaishinkitView').Commands[cmdName],
         cmdArgs
       );
     } catch (e) {

@@ -1,6 +1,6 @@
 {
   "name": "react-native-haishinkit-view",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "live view using haishinkit",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
