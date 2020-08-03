@@ -1,17 +1,13 @@
 import * as React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import HaishinkitView from 'react-native-haishinkit-view';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
-
-  React.useEffect(() => {
-    HaishinkitView.multiply(3, 7).then(setResult);
-  }, []);
+  React.useEffect(() => {}, []);
 
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <HaishinkitView />
     </View>
   );
 }
