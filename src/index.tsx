@@ -14,6 +14,7 @@ type NativeEventObject = {
 type LiveViewProps = {
   streamUrl?: string;
   streamKey?: string;
+  bitrate?: number;
 
   onViewStatus?: (detail: NativeEventObject) => any;
   onViewError?: (detail: NativeEventObject) => any;
@@ -94,6 +95,8 @@ class HaishinkitView extends Component<LiveViewProps> {
 HaishinkitView.propTypes = {
   streamUrl: PropTypes.string,
   streamKey: PropTypes.string,
+  bitrate: PropTypes.number,
+
   onViewStatus: PropTypes.func,
   onViewError: PropTypes.func,
   startPublish: PropTypes.func,
