@@ -1,16 +1,18 @@
 #import <Foundation/Foundation.h>
+#import "react_native_haishinkit_view-Swift.h"
+
 #import <React/RCTViewManager.h>
 #import <React/RCTComponent.h>
 #import <React/RCTConvert.h>
-#import "HaishinkitView-Swift.h"
 
-@interface RNHaishinkitViewManager : RCTViewManager
 
-@property (strong) HaishinkitView* bView;
+@interface HaishinkitViewManager : RCTViewManager
+
+@property (strong) HaishinKitView* _bView;
 
 @end
 
-@implementation RNHaishinkitViewManager
+@implementation HaishinkitViewManager
 
 RCT_EXPORT_MODULE(HaishinkitView)
 

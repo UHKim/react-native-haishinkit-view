@@ -4,7 +4,6 @@ import HaishinKit
 import VideoToolbox
 
 @objc class HaishinkitView: HKView, RTMPStreamDelegate {
-
   private static let maxRetryCount: Int = 5
   
   private var rtmpConnection = RTMPConnection()
