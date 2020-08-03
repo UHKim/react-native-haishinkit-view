@@ -3,14 +3,14 @@ require "json"
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 
 Pod::Spec.new do |s|
-  s.name         = "react-native-haishinkit-view"
+  s.name         = "RNHaishinkitView"
   s.version      = package["version"]
   s.summary      = package["description"]
   s.homepage     = package["homepage"]
   s.license      = package["license"]
   s.authors      = package["author"]
 
-  s.platforms    = { :ios => "9.0" }
+  s.platforms    = { :ios => "11.0" }
   s.source       = { :git => "https://github.com/UHKim/react-native-haishinkit-view.git", :tag => "#{s.version}" }
 
   
@@ -19,4 +19,6 @@ Pod::Spec.new do |s|
 
   s.dependency "React"
   s.dependency "HaishinKit", "~> 1.0.9"
+
+  s.frameworks = ['VideoToolbox', 'AVFoundation']
 end

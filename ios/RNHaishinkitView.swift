@@ -1,9 +1,14 @@
+//
+//  RNHaishinkitView.swift
+//  RNHaishinkitView
+//
 import UIKit
+import Foundation
 import AVFoundation
 import HaishinKit
 import VideoToolbox
 
-@objc class HaishinkitView: HKView, RTMPStreamDelegate {
+@objc public class RNHaishinkitView: HKView, RTMPStreamDelegate {
   private static let maxRetryCount: Int = 5
   
   private var rtmpConnection = RTMPConnection()
@@ -50,21 +55,21 @@ import VideoToolbox
   }
   
   
-  func didPublishInsufficientBW(_ stream: RTMPStream, withConnection: RTMPConnection) {
+  public func didPublishInsufficientBW(_ stream: RTMPStream, withConnection: RTMPConnection) {
     if (onViewStatus != nil) {onViewStatus!(["status": "INSUFFICIENT_BW", "fps": stream.currentFPS] )}
   }
   
-  func didPublishSufficientBW(_ stream: RTMPStream, withConnection: RTMPConnection) {
+  public func didPublishSufficientBW(_ stream: RTMPStream, withConnection: RTMPConnection) {
     if (onViewStatus != nil) {onViewStatus!(["status": "SUFFICIENT_BW", "fps": stream.currentFPS])}
   }
   
-  func clear() {
+  public func clear() {
     if (onViewStatus != nil) {onViewError!(["name": "clear"])}
   }
   
 
   @objc(initBroadcastView)
-  func initBroadcastView() -> Void{
+  public func initBroadcastView() -> Void{
     print("initBroadcastView START")
     self.videoGravity = AVLayerVideoGravity.resizeAspectFill
     
@@ -77,7 +82,7 @@ import VideoToolbox
   }
   
   @objc(configRtmpStream)
-  func configRtmpStream() -> Void{
+  public func configRtmpStream() -> Void{
     print("configRtmpStream START")
     rtmpStream = RTMPStream(connection: rtmpConnection);
 
@@ -113,7 +118,7 @@ import VideoToolbox
   
   
   @objc(toggleCamera)
-  func toggleCamera() -> Void{
+  public func toggleCamera() -> Void{
     usingFront = !usingFront
     rtmpStream.attachCamera(DeviceUtil.device(withPosition: usingFront ? .front : .back)) { error in
         print(error)
@@ -123,7 +128,7 @@ import VideoToolbox
 
   
   @objc(startPublish)
-  func startPublish() -> Void{
+  public func startPublish() -> Void{
     if ((streamUrl) != nil){
     rtmpConnection.addEventListener(.rtmpStatus, selector: #selector(rtmpStatusHandler), observer: self)
     rtmpConnection.addEventListener(.ioError, selector: #selector(rtmpErrorHandler), observer: self)
@@ -134,7 +139,7 @@ import VideoToolbox
   
   
   @objc(stopPublish)
-  func stopPublish() -> Void{
+  public func stopPublish() -> Void{
     if (rtmpConnection.connected == true){
       rtmpConnection.close()
       rtmpConnection.removeEventListener(.rtmpStatus, selector: #selector(rtmpStatusHandler), observer: self)
@@ -143,13 +148,13 @@ import VideoToolbox
   }
   
   @objc(rtmpErrorHandler:)
-  func rtmpErrorHandler(notification: Notification){
+  public func rtmpErrorHandler(notification: Notification){
     if (onViewStatus != nil) {onViewError!(["description": notification.description, "name": notification.name ] )}
     if (streamUrl != nil){rtmpConnection.connect(streamUrl!)}
   }
   
   @objc(rtmpStatusHandler:)
-  func rtmpStatusHandler(notification: Notification){
+  public func rtmpStatusHandler(notification: Notification){
     let e = Event.from(notification)
     guard let data: ASObject = e.data as? ASObject, let code: String = data["code"] as? String else {
         return
@@ -164,7 +169,7 @@ import VideoToolbox
         rtmpStream!.publish(streamKey)
         // sharedObject!.connect(rtmpConnection)
     case RTMPConnection.Code.connectFailed.rawValue, RTMPConnection.Code.connectClosed.rawValue:
-      guard retryCount <= HaishinkitView.maxRetryCount else {
+      guard retryCount <= RNHaishinkitView.maxRetryCount else {
             return
         }
         Thread.sleep(forTimeInterval: pow(2.0, Double(retryCount)))
@@ -188,3 +193,4 @@ import VideoToolbox
   }
 
 }
+

@@ -1,20 +1,22 @@
+#import <React/RCTBridgeModule.h>
 #import <Foundation/Foundation.h>
-#import "react_native_haishinkit_view-Swift.h"
 
 #import <React/RCTViewManager.h>
 #import <React/RCTComponent.h>
 #import <React/RCTConvert.h>
+#import "RNHaishinkitView-Swift.h"
 
+@import RNHaishinkitView;
 
-@interface HaishinkitViewManager : RCTViewManager
+@interface RNHaishinkitViewManager : RCTViewManager
 
-@property (strong) HaishinKitView* _bView;
+@property (strong) RNHaishinkitView* bView;
 
 @end
 
-@implementation HaishinkitViewManager
+@implementation RNHaishinkitViewManager
 
-RCT_EXPORT_MODULE(HaishinkitView)
+RCT_EXPORT_MODULE(RNHKView)
 
 RCT_EXPORT_VIEW_PROPERTY(streamUrl, NSString)
 RCT_EXPORT_VIEW_PROPERTY(streamKey, NSString)
@@ -46,7 +48,7 @@ RCT_EXPORT_METHOD(toggleCamera:options){
 
 - (UIView *) view
 {
-  if (_bView ==nil) _bView =[[HaishinkitView alloc] init];
+  if (_bView ==nil) _bView =[[RNHaishinkitView alloc] init];
   return _bView ;
 }
 
