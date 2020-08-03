@@ -2,7 +2,7 @@
 #import <React/RCTViewManager.h>
 #import <React/RCTComponent.h>
 #import <React/RCTConvert.h>
-
+#import "HaishinkitView-Swift.h"
 
 @interface RNHaishinkitViewManager : RCTViewManager
 

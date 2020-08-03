@@ -165,7 +165,7 @@ import VideoToolbox
         rtmpStream!.publish(streamKey)
         // sharedObject!.connect(rtmpConnection)
     case RTMPConnection.Code.connectFailed.rawValue, RTMPConnection.Code.connectClosed.rawValue:
-      guard retryCount <= BroadcastView.maxRetryCount else {
+      guard retryCount <= HaishinkitView.maxRetryCount else {
             return
         }
         Thread.sleep(forTimeInterval: pow(2.0, Double(retryCount)))
