@@ -31,7 +31,7 @@ export type RtmpStatusType = {
   description: string;
 };
 
-let HKViewNative = requireNativeComponent<HaishinkitView>('HaishinkitView');
+let HKViewNative = requireNativeComponent<LiveViewProps>('HaishinkitView');
 
 class HaishinkitView extends Component<LiveViewProps> {
   static propTypes: any;
@@ -81,7 +81,13 @@ class HaishinkitView extends Component<LiveViewProps> {
   toggleCamera = () => this.broadcastViewCmd('toggleCamera');
 
   render() {
-    return <HKViewNative {...this.props} />;
+    return (
+      <HKViewNative
+        {...this.props}
+        onViewStatus={this._onViewStatus}
+        onViewError={this._onViewError}
+      />
+    );
   }
 }
 
@@ -92,7 +98,8 @@ HaishinkitView.propTypes = {
   onViewError: PropTypes.func,
   startPublish: PropTypes.func,
   stopPublish: PropTypes.func,
-  changeCamera: PropTypes.func,
+  toggleCamera: PropTypes.func,
+
   scaleX: PropTypes.number,
   scaleY: PropTypes.number,
   translateX: PropTypes.number,
