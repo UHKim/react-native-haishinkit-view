@@ -15,6 +15,9 @@ type LiveViewProps = {
   streamUrl?: string;
   streamKey?: string;
   bitrate?: number;
+  
+  outputWidth?: number;
+  outputHeight?: number;
 
   onViewStatus?: (detail: NativeEventObject) => any;
   onViewError?: (detail: NativeEventObject) => any;
@@ -96,6 +99,9 @@ HaishinkitView.propTypes = {
   streamUrl: PropTypes.string,
   streamKey: PropTypes.string,
   bitrate: PropTypes.number,
+
+  outputWidth: PropTypes.number,
+  outputHeight: PropTypes.number,
 
   onViewStatus: PropTypes.func,
   onViewError: PropTypes.func,
