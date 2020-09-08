@@ -48,7 +48,7 @@ RCT_EXPORT_METHOD(toggleCamera:options){
 
 - (UIView *) view
 {
-  if (_bView ==nil) _bView =[[RNHaishinkitView alloc] init];
+  if (_bView == nil) _bView = [[RNHaishinkitView alloc] init];
   return _bView ;
 }
 

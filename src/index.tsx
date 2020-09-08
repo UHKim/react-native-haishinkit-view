@@ -72,7 +72,7 @@ class HaishinkitView extends Component<LiveViewProps> {
   };
 
   _onViewError = (event: NativeEventObject) => {
-    if (!this.props.onViewStatus) {
+    if (!this.props.onViewError) {
       return;
     }
     this.props.onViewError!(event.nativeEvent);
