@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.pod_target_xcconfig = { "DEFINES_MODULE" => "YES" }
 
   s.dependency "React"
-  s.dependency "HaishinKit", "~> 1.0.9"
+  s.dependency "HaishinKit", "~> 1.0.12"
 
   s.frameworks = ['VideoToolbox', 'AVFoundation']
 end

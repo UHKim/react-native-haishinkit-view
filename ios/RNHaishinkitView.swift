@@ -121,7 +121,7 @@ import HaishinKit
         // .isVideoMirrored: false,
         .continuousAutofocus: true, // use camera autofocus mode
         .continuousExposure: true, //  use camera exposure mode
-        .preferredVideoStabilizationMode: AVCaptureVideoStabilizationMode.auto
+        .preferredVideoStabilizationMode: AVCaptureVideoStabilizationMode.RawValue.off
     ]
     rtmpStream.audioSettings = [
         .muted: false, // mute audio
@@ -131,7 +131,7 @@ import HaishinKit
          .width: outputWidth ??  540, // video output width
         .height: outputHeight ??  960, // video output height
         .bitrate: bitrate ?? 4 * 1000 * 1024, // video output bitrate
-        .profileLevel: kVTProfileLevel_H264_High_AutoLevel, // H264 Profile require "import VideoToolbox"
+        .profileLevel: kVTProfileLevel_H264_Baseline_AutoLevel, // H264 Profile require "import VideoToolbox"
         .maxKeyFrameIntervalDuration: 2, // key frame / sec
     ]    
     

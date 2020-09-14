@@ -5,6 +5,7 @@ import java.nio.ByteBuffer
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.concurrent.ConcurrentHashMap
+import android.util.Log
 
 import com.haishinkit.events.Event
 import com.haishinkit.events.EventDispatcher
@@ -14,7 +15,6 @@ import com.haishinkit.rtmp.messages.RTMPCommandMessage
 import com.haishinkit.rtmp.messages.RTMPMessage
 import com.haishinkit.rtmp.messages.RTMPSetChunkSizeMessage
 import com.haishinkit.util.EventUtils
-import com.haishinkit.util.Log
 
 import org.apache.commons.lang3.StringUtils
 
@@ -79,11 +79,11 @@ open class RTMPConnection : EventDispatcher(null) {
         override fun handleEvent(event: Event) {
             val data = EventUtils.toMap(event)
             when (data["code"].toString()) {
-                Code.CONNECT_SUCCESS.rawValue -> {
+                RTMPConnection.Code.CONNECT_SUCCESS.rawValue -> {
                     var message = RTMPSetChunkSizeMessage()
-                    message.size = DEFAULT_CHUNK_SIZE_S
+                    message.size = RTMPConnection.DEFAULT_CHUNK_SIZE_S
                     message.chunkStreamID = RTMPChunk.CONTROL
-                    connection.socket.chunkSizeS = DEFAULT_CHUNK_SIZE_S
+                    connection.socket.chunkSizeS = RTMPConnection.DEFAULT_CHUNK_SIZE_S
                     connection.socket.doOutput(RTMPChunk.ZERO, message)
                 }
             }
@@ -94,8 +94,8 @@ open class RTMPConnection : EventDispatcher(null) {
         private set
     var swfUrl: String? = null
     var pageUrl: String? = null
-    var flashVer = DEFAULT_FLASH_VER
-    var objectEncoding = DEFAULT_OBJECT_ENCODING
+    var flashVer = RTMPConnection.DEFAULT_FLASH_VER
+    var objectEncoding = RTMPConnection.DEFAULT_OBJECT_ENCODING
     internal val messages = ConcurrentHashMap<Short, RTMPMessage>()
     internal val streams = ConcurrentHashMap<Int, RTMPStream>()
     internal val responders = ConcurrentHashMap<Int, IResponder>()
@@ -141,7 +141,7 @@ open class RTMPConnection : EventDispatcher(null) {
         arguments.forEach { value ->
             this.arguments.add(value)
         }
-        socket.connect(uri!!.host, if (port == -1) DEFAULT_PORT else port)
+        socket.connect(uri!!.host, if (port == -1) RTMPConnection.DEFAULT_PORT else port)
     }
 
     fun close() {
@@ -149,6 +149,13 @@ open class RTMPConnection : EventDispatcher(null) {
             return
         }
         socket.close(false)
+    }
+
+    fun dispose() {
+        streams.forEach {
+            it.value.dispose()
+        }
+        streams.clear()
     }
 
     internal fun listen(buffer: ByteBuffer) {
@@ -203,7 +210,7 @@ open class RTMPConnection : EventDispatcher(null) {
             override fun onResult(arguments: List<Any?>) {
                 val id = (arguments[0] as Double).toInt()
                 stream.id = id
-                streams.put(id, stream)
+                streams[id] = stream
                 stream.readyState = RTMPStream.ReadyState.OPEN
             }
             override fun onStatus(arguments: List<Any?>) {
@@ -216,17 +223,17 @@ open class RTMPConnection : EventDispatcher(null) {
         val paths = uri!!.path.split("/".toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
         val message = RTMPCommandMessage(RTMPObjectEncoding.AMF0)
         val commandObject = HashMap<String, Any?>()
-        commandObject.put("app", paths[1])
-        commandObject.put("flashVer", flashVer)
-        commandObject.put("swfUrl", swfUrl)
-        commandObject.put("tcUrl", uri!!.toString())
-        commandObject.put("fpad", false)
-        commandObject.put("capabilities", DEFAULT_CAPABILITIES)
-        commandObject.put("audioCodecs", SupportSound.AAC.rawValue)
-        commandObject.put("videoCodecs", SupportVideo.H264.rawValue)
-        commandObject.put("videoFunction", VideoFunction.CLIENT_SEEK.rawValue)
-        commandObject.put("pageUrl", pageUrl)
-        commandObject.put("objectEncoding", objectEncoding.rawValue)
+        commandObject["app"] = paths[1]
+        commandObject["flashVer"] = flashVer
+        commandObject["swfUrl"] = swfUrl
+        commandObject["tcUrl"] = uri!!.toString()
+        commandObject["fpad"] = false
+        commandObject["capabilities"] = RTMPConnection.DEFAULT_CAPABILITIES
+        commandObject["audioCodecs"] = SupportSound.AAC.rawValue
+        commandObject["videoCodecs"] = SupportVideo.H264.rawValue
+        commandObject["videoFunction"] = VideoFunction.CLIENT_SEEK.rawValue
+        commandObject["pageUrl"] = pageUrl
+        commandObject["objectEncoding"] = objectEncoding.rawValue
         message.chunkStreamID = RTMPChunk.COMMAND
         message.streamID = 0
         message.commandName = "connect"
@@ -239,11 +246,11 @@ open class RTMPConnection : EventDispatcher(null) {
     }
 
     companion object {
-        val DEFAULT_PORT = 1935
-        val DEFAULT_FLASH_VER = "FMLE/3.0 (compatible; FMSc/1.0)"
+        const val DEFAULT_PORT = 1935
+        const val DEFAULT_FLASH_VER = "FMLE/3.0 (compatible; FMSc/1.0)"
         val DEFAULT_OBJECT_ENCODING = RTMPObjectEncoding.AMF0
 
-        private val DEFAULT_CHUNK_SIZE_S = 1024 * 8
-        private val DEFAULT_CAPABILITIES = 239
+        private const val DEFAULT_CHUNK_SIZE_S = 1024 * 8
+        private const val DEFAULT_CAPABILITIES = 239
     }
 }

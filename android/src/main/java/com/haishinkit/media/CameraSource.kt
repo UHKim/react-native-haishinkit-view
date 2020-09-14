@@ -3,17 +3,19 @@ package com.haishinkit.media
 import android.graphics.ImageFormat
 import android.hardware.Camera
 import android.view.SurfaceHolder
+import android.util.Log
 import com.haishinkit.yuv.NV21toYUV420SemiPlanarConverter
 import com.haishinkit.media.util.CameraUtils
 import com.haishinkit.media.util.MediaCodecUtils
 import com.haishinkit.rtmp.RTMPStream
-import com.haishinkit.util.Log
 import com.haishinkit.util.Size
 
-class Camera: SurfaceHolder.Callback, android.hardware.Camera.PreviewCallback, IDevice {
+class CameraSource: IVideoSource, SurfaceHolder.Callback, android.hardware.Camera.PreviewCallback {
     var camera: android.hardware.Camera?
-    internal var displayOrientaion:Int = 0
-    internal var stream: RTMPStream? = null
+
+    override var stream: RTMPStream? = null
+    internal var displayOrientation:Int = 0
+    override val isRunning: Boolean = false
 
     var size: Size = Size(DEFAULT_WIDTH, DEFAULT_HEIGHT)
     var actualSize: Size = Size(DEFAULT_WIDTH, DEFAULT_HEIGHT)
@@ -21,34 +23,6 @@ class Camera: SurfaceHolder.Callback, android.hardware.Camera.PreviewCallback, I
 
     constructor(camera: android.hardware.Camera) {
         this.camera = camera
-    }
-
-    override fun surfaceCreated(holder: SurfaceHolder?) {
-        try {
-            camera?.setPreviewCallback(this)
-            camera?.setPreviewDisplay(holder)
-        } catch (e:Exception) {
-            Log.w(javaClass.name, "", e)
-        }
-    }
-
-    override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
-        camera?.stopPreview()
-        if (-1 < displayOrientaion) {
-            camera?.setDisplayOrientation(displayOrientaion)
-            val byteConverter = stream?.getEncoderByName("video/avc")?.byteConverter
-            if (byteConverter is NV21toYUV420SemiPlanarConverter) {
-                byteConverter.rotation = displayOrientaion
-            }
-        }
-        camera?.startPreview()
-    }
-
-    override fun surfaceDestroyed(holder: SurfaceHolder?) {
-    }
-
-    override fun onPreviewFrame(bytes: ByteArray?, camera: Camera?) {
-        stream?.appendBytes(bytes, System.nanoTime() / 1000000L, RTMPStream.BufferType.VIDEO)
     }
 
     override fun setUp() {
@@ -69,9 +43,43 @@ class Camera: SurfaceHolder.Callback, android.hardware.Camera.PreviewCallback, I
     override fun tearDown() {
     }
 
+    override fun startRunning() {
+    }
+
+    override fun stopRunning() {
+    }
+
+    override fun surfaceCreated(holder: SurfaceHolder?) {
+        try {
+            camera?.setPreviewCallback(this)
+            camera?.setPreviewDisplay(holder)
+        } catch (e:Exception) {
+            Log.w(javaClass.name, "", e)
+        }
+    }
+
+    override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
+        camera?.stopPreview()
+        if (-1 < displayOrientation) {
+            camera?.setDisplayOrientation(displayOrientation)
+            val byteConverter = stream?.getEncoderByName("video/avc")?.byteConverter
+            if (byteConverter is NV21toYUV420SemiPlanarConverter) {
+                byteConverter.rotation = displayOrientation
+            }
+        }
+        camera?.startPreview()
+    }
+
+    override fun surfaceDestroyed(holder: SurfaceHolder?) {
+    }
+
+    override fun onPreviewFrame(bytes: ByteArray?, camera: Camera?) {
+        stream?.appendBytes(bytes, System.nanoTime() / 1000000L, RTMPStream.BufferType.VIDEO)
+    }
+
     companion object {
-        var DEFAULT_WIDTH:Int = 640
-        var DEFAULT_HEIGHT:Int = 480
+        const val DEFAULT_WIDTH:Int = 640
+        const val DEFAULT_HEIGHT:Int = 480
     }
 }
 

@@ -6,12 +6,13 @@ import android.media.MediaRecorder
 import com.haishinkit.rtmp.RTMPStream
 import org.apache.commons.lang3.builder.ToStringBuilder
 
-class Audio: AudioRecord.OnRecordPositionUpdateListener, IDevice {
+class AudioSource() : IAudioSource, AudioRecord.OnRecordPositionUpdateListener {
     var channel = DEFAULT_CHANNEL
-    internal var stream: RTMPStream? = null
+    override var stream: RTMPStream? = null
+    override var isRunning: Boolean = false
     private var encoding = DEFAULT_ENCODING
 
-    private  var _buffer: ByteArray? = null
+    private var _buffer: ByteArray? = null
     var buffer: ByteArray?
         get() {
             if (_buffer == null) {
@@ -55,12 +56,7 @@ class Audio: AudioRecord.OnRecordPositionUpdateListener, IDevice {
             _audioRecord = value
         }
 
-    var currentPresentationTimestamp:Double = 0.0
-
-    fun startRecording() {
-        audioRecord?.startRecording()
-        audioRecord?.read(buffer, 0, minBufferSize)
-    }
+    private var currentPresentationTimestamp:Double = 0.0
 
     override fun setUp() {
         audioRecord?.positionNotificationPeriod = minBufferSize / 2
@@ -68,6 +64,17 @@ class Audio: AudioRecord.OnRecordPositionUpdateListener, IDevice {
     }
 
     override fun tearDown() {
+        audioRecord?.setRecordPositionUpdateListener(null)
+    }
+
+    override fun startRunning() {
+        currentPresentationTimestamp = 0.0
+        audioRecord?.startRecording()
+        audioRecord?.read(buffer, 0, minBufferSize)
+    }
+
+    override fun stopRunning() {
+        audioRecord?.stop()
     }
 
     override fun onMarkerReached(audio: AudioRecord?) {
@@ -79,7 +86,7 @@ class Audio: AudioRecord.OnRecordPositionUpdateListener, IDevice {
         currentPresentationTimestamp += timestamp()
     }
 
-    fun timestamp():Double {
+    private fun timestamp():Double {
         return 1000000 * (minBufferSize.toDouble() / 2 / samplingRate.toDouble())
     }
 
@@ -88,8 +95,8 @@ class Audio: AudioRecord.OnRecordPositionUpdateListener, IDevice {
     }
 
     companion object {
-        val DEFAULT_CHANNEL = AudioFormat.CHANNEL_IN_MONO
-        val DEFAULT_ENCODING = AudioFormat.ENCODING_PCM_16BIT
-        val DEFAULT_SAMPLING_RATE = 44100
+        const val DEFAULT_CHANNEL = AudioFormat.CHANNEL_IN_MONO
+        const val DEFAULT_ENCODING = AudioFormat.ENCODING_PCM_16BIT
+        const val DEFAULT_SAMPLING_RATE = 44100
     }
 }

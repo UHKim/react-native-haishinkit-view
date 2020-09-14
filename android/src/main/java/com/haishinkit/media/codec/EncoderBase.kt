@@ -1,8 +1,7 @@
 package com.haishinkit.media.codec
 
+import android.util.Log
 import android.media.MediaCodec
-
-import com.haishinkit.util.Log
 import java.io.IOException
 import java.lang.Runnable
 import java.util.concurrent.atomic.AtomicBoolean

@@ -9,12 +9,11 @@ import com.haishinkit.events.Event
 import com.haishinkit.rtmp.RTMPConnection
 import com.haishinkit.rtmp.RTMPObjectEncoding
 import com.haishinkit.rtmp.RTMPSocket
-import com.haishinkit.util.Log
 
 /**
  *  7.1.1. Command Message (20, 17)
  */
-internal class RTMPCommandMessage(val objectEncoding: RTMPObjectEncoding) : RTMPMessage(objectEncoding.commandType) {
+internal class RTMPCommandMessage(private val objectEncoding: RTMPObjectEncoding) : RTMPMessage(objectEncoding.commandType) {
     var commandName: String? = null
     var transactionID = 0
     var commandObject: Map<String, Any?>? = null
@@ -85,6 +84,6 @@ internal class RTMPCommandMessage(val objectEncoding: RTMPObjectEncoding) : RTMP
     }
 
     companion object {
-        private val CAPACITY = 1024
+        private const val CAPACITY = 1024
     }
 }

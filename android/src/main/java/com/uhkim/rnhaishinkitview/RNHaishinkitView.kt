@@ -2,24 +2,24 @@ package com.uhkim.rnhaishinkitview
 
 import android.content.Context
 import android.hardware.Camera
+import android.util.Log
 import android.view.SurfaceHolder
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.ReactContext
 import com.facebook.react.uimanager.events.RCTEventEmitter
 import com.haishinkit.events.Event
 import com.haishinkit.events.IEventListener
-import com.haishinkit.media.Audio
+import com.haishinkit.media.AudioSource
 import com.haishinkit.rtmp.RTMPConnection
 import com.haishinkit.rtmp.RTMPStream
 import com.haishinkit.util.EventUtils
-import com.haishinkit.util.Log
 import com.haishinkit.view.CameraView
 
 
-class RNHaishinkitView(context: Context): CameraView(context), IEventListener {
+class RNHaishinkitView(context: Context): CameraView(context, attributes), IEventListener {
   private var rtmpConnection: RTMPConnection = RTMPConnection()
   private var rtmpStream: RTMPStream? = null;
-  var camera = com.haishinkit.media.Camera(Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK))
+  var camera = com.haishinkit.media.CameraSource(Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK))
 
   var streamUrl: String? = null;
   var streamKey: String? = null;
@@ -63,7 +63,7 @@ class RNHaishinkitView(context: Context): CameraView(context), IEventListener {
     rtmpStream = RTMPStream(rtmpConnection!!)
 
     rtmpStream?.attachCamera(camera)
-    rtmpStream?.attachAudio(Audio())
+    rtmpStream?.attachAudio(AudioSource())
 
     toggleCamera()
   }
@@ -83,7 +83,7 @@ class RNHaishinkitView(context: Context): CameraView(context), IEventListener {
 
   fun toggleCamera(){
     useFront = !useFront
-    camera = com.haishinkit.media.Camera(Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK))
+    camera = com.haishinkit.media.CameraSource(Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK))
     camera.actualSize.width = this!!.outputWidth!!
     camera.actualSize.height = this!!.outputHeight!!
   }

@@ -1,7 +1,6 @@
 package com.haishinkit.net
 
-import com.haishinkit.util.Log
-
+import android.util.Log
 import org.apache.commons.io.IOUtils
 import org.apache.commons.lang3.builder.ToStringBuilder
 
@@ -15,7 +14,7 @@ import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.BlockingQueue
 
 abstract class Socket {
-    protected var inputBuffer: ByteBuffer? = null
+    private var inputBuffer: ByteBuffer? = null
     private var socket: java.net.Socket? = null
     private var output: Thread? = null
     private var network: Thread? = null
